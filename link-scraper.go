@@ -33,19 +33,15 @@ func New(APIKey string, EngineID string) *ImageLinkScraper {
 func (s *ImageLinkScraper) Query(query string) []string {
 	imageUrls := make([]string, 0)
 	for i := 0; i < 10; i++ {
-		// fmt.Println(int64(i*10 + 1))
 		resp, err := s.cse.List(query).Cx(s.engineID).SearchType("image").Start(int64(i*10 + 1)).Do()
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		for _, result := range resp.Items {
-			// fmt.Printf("#%d: %s\n", i+1, result.Title)
-			// fmt.Printf("\t%s\n", result.Snippet)
-			// fmt.Println(result.Link)
 			imageUrls = append(imageUrls, result.Link)
 		}
-		fmt.Printf("Round %d/%d\n", i+1, 10)
+		fmt.Printf("Page %d/%d: %d Images\n", i+1, 10, len(resp.Items))
 	}
 	return imageUrls
 }
