@@ -30,12 +30,12 @@ func New(APIKey string, EngineID string) *ImageLinkScraper {
 }
 
 // Query query
-func (s *ImageLinkScraper) Query(query string) []string {
+func (s *ImageLinkScraper) Query(query string, pages int) []string {
 	imageUrls := make([]string, 0)
-	for i := 0; i < 10; i++ {
+	for i := 0; i < pages; i++ {
 		resp, err := s.cse.List(query).Cx(s.engineID).SearchType("image").Start(int64(i*10 + 1)).Do()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Printf("Error on page %d: %s\n", i+1, err)
 		}
 
 		for _, result := range resp.Items {
