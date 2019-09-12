@@ -36,6 +36,7 @@ func (s *ImageLinkScraper) Query(query string, pages int) []string {
 		resp, err := s.cse.List(query).Cx(s.engineID).SearchType("image").Start(int64(i*10 + 1)).Do()
 		if err != nil {
 			fmt.Printf("Error on page %d: %s\n", i+1, err)
+			continue
 		}
 
 		for _, result := range resp.Items {
